@@ -21,4 +21,4 @@ dvc-venv
 .DS_Store
 
 #notebooks
-notebook/*
+notebooks/*
