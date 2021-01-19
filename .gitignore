@@ -20,3 +20,5 @@ dvc-venv
 ## OS configs
 .DS_Store
 
+#notebooks
+notebook/*
