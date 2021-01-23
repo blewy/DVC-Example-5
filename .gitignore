@@ -20,5 +20,8 @@ dvc-venv
 ## OS configs
 .DS_Store
 
+*.Rproj
+
 #notebooks
 notebooks/*
+.Rproj.user
