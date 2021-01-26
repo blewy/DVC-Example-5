@@ -6,7 +6,7 @@ import yaml
 from src.features.features import extract_features
 
 
-def featurize(config_path=Text) -> None:
+def featurize(config_path: Text) -> None:
     """ Lod Raw Data
         Args:
             config_path {Text} path to config
