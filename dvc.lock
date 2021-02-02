@@ -1,0 +1,174 @@
+data_load:
+  cmd: python src/pipelines/data_load.py --config=params.yaml
+  deps:
+  - path: src/pipelines/data_load.py
+    md5: b3050f2105add84bc7e296942167af37
+    size: 587
+  params:
+    params.yaml:
+      base:
+        project: dvc-5-demo-project-iris
+        model:
+          model_name: model.joblib
+          models_folder: models
+        reports:
+          reports_folder: reports
+        random_state: 42
+      data_load:
+        dataset_csv: data/raw/iris.csv
+  outs:
+  - path: data/raw/iris.csv
+    md5: 4224576f0267bf88902f87f0f6200967
+    size: 2757
+featurize:
+  cmd: python src/pipelines/featurize.py --config=params.yaml
+  deps:
+  - path: data/raw/iris.csv
+    md5: 4224576f0267bf88902f87f0f6200967
+    size: 2757
+  - path: src/pipelines/featurize.py
+    md5: 0d31484cb7fa63430d4dc9457b6a059f
+    size: 743
+  params:
+    params.yaml:
+      base:
+        project: dvc-5-demo-project-iris
+        model:
+          model_name: model.joblib
+          models_folder: models
+        reports:
+          reports_folder: reports
+        random_state: 42
+      data_load:
+        dataset_csv: data/raw/iris.csv
+      featurize:
+        features_path: data/processed/featured_iris.csv
+        target_column: target
+  outs:
+  - path: data/processed/featured_iris.csv
+    md5: 5d03a1564b3038fc35a842f8e4bde491
+    size: 7260
+data_split:
+  cmd: python src/pipelines/data_split.py --config=params.yaml
+  deps:
+  - path: data/processed/featured_iris.csv
+    md5: 5d03a1564b3038fc35a842f8e4bde491
+    size: 7260
+  - path: src/pipelines/data_split.py
+    md5: 9b24a35e06555e6633a30aa79530af65
+    size: 1066
+  params:
+    params.yaml:
+      base:
+        project: dvc-5-demo-project-iris
+        model:
+          model_name: model.joblib
+          models_folder: models
+        reports:
+          reports_folder: reports
+        random_state: 42
+      data_split:
+        folder: experiments
+        train_path: data/processed/train_iris.csv
+        test_path: data/processed/test_iris.csv
+        test_size: 0.3
+      featurize:
+        features_path: data/processed/featured_iris.csv
+        target_column: target
+  outs:
+  - path: data/processed/test_iris.csv
+    md5: e9da0d8bcd282916bf2e4368b32ac0d7
+    size: 867
+  - path: data/processed/train_iris.csv
+    md5: 3308305bd4af71fef704824141a88ed9
+    size: 1947
+train:
+  cmd: python src/pipelines/train.py --config=params.yaml
+  deps:
+  - path: data/processed/train_iris.csv
+    md5: 3308305bd4af71fef704824141a88ed9
+    size: 1947
+  - path: src/pipelines/train.py
+    md5: 4d29094720afa0f78cee4c0da8386f7c
+    size: 2451
+  params:
+    params.yaml:
+      base:
+        project: dvc-5-demo-project-iris
+        model:
+          model_name: model.joblib
+          models_folder: models
+        reports:
+          reports_folder: reports
+        random_state: 42
+      data_split.train_path: data/processed/train_iris.csv
+      featurize.target_column: target
+      train:
+        cv: 3
+        estimator_name: logreg
+        estimators:
+          logreg:
+            param_grid:
+              C:
+              - 0.001
+              max_iter:
+              - 100
+              solver:
+              - lbfgs
+              multi_class:
+              - multinomial
+          svm:
+            param_grid:
+              C:
+              - 0.1
+              - 1.0
+              kernel:
+              - rbf
+              - linear
+              gamma:
+              - scale
+              degree:
+              - 3
+              - 5
+  outs:
+  - path: models/model.joblib
+    md5: 5909a4ad2111214f8c4e03c2289385ea
+    size: 2666
+evaluate:
+  cmd: python src/pipelines/evaluate.py --config=params.yaml
+  deps:
+  - path: data/processed/test_iris.csv
+    md5: e9da0d8bcd282916bf2e4368b32ac0d7
+    size: 867
+  - path: models/model.joblib
+    md5: 5909a4ad2111214f8c4e03c2289385ea
+    size: 2666
+  - path: src/pipelines/evaluate.py
+    md5: 824303b963d3fa66ccb1396dd79a5dde
+    size: 2271
+  params:
+    params.yaml:
+      base:
+        project: dvc-5-demo-project-iris
+        model:
+          model_name: model.joblib
+          models_folder: models
+        reports:
+          reports_folder: reports
+        random_state: 42
+      data_split.test_path: data/processed/test_iris.csv
+      evaluate:
+        metrics_file: metrics.json
+        confusion_matrix_png: confusion_matrix.png
+        classes_path: classess.csv
+      featurize.target_column: target
+  outs:
+  - path: reports/classess.csv
+    md5: 484f1aa1c3375bb60d4d892dab48f7fa
+    size: 855
+  - path: reports/confusion_matrix.png
+    md5: cae56e18cdc169ba969443f1505c5a0e
+    size: 27892
+  - path: reports/metrics.json
+    md5: 4b575fdef915d66f4c4d6113d86ac97a
+    size: 32
