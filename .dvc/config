@@ -1,4 +1,6 @@
 [core]
-    remote = local
+    remote = myremote
 ['remote "local"']
     url = /Users/joaosantos/Documents/Study/Machine Learning experiments with DVC/dvc.cache
+['remote "myremote"']
+    url = gdrive://16cDInWlCj0ld1VXIlVEK4IDbYffSnciV
