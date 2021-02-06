@@ -112,7 +112,7 @@ train:
               C:
               - 0.001
               max_iter:
-              - 100
+              - 1000
               solver:
               - lbfgs
               multi_class:
@@ -132,8 +132,8 @@ train:
               - 5
   outs:
   - path: models/model.joblib
-    md5: 5909a4ad2111214f8c4e03c2289385ea
-    size: 2666
+    md5: f23c304bd9db799db1b132bbb72d5b5d
+    size: 2670
 evaluate:
   cmd: python src/pipelines/evaluate.py --config=params.yaml
   deps:
@@ -141,8 +141,8 @@ evaluate:
     md5: e9da0d8bcd282916bf2e4368b32ac0d7
     size: 867
   - path: models/model.joblib
-    md5: 5909a4ad2111214f8c4e03c2289385ea
-    size: 2666
+    md5: f23c304bd9db799db1b132bbb72d5b5d
+    size: 2670
   - path: src/pipelines/evaluate.py
     md5: 824303b963d3fa66ccb1396dd79a5dde
     size: 2271
