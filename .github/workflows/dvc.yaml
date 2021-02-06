@@ -1,4 +1,4 @@
-name: run_action
+name: farmers
 on: [push]
 jobs:
   run:
@@ -6,11 +6,10 @@ jobs:
     container: docker://dvcorg/cml-py3:latest
     steps:
       - uses: actions/checkout@v2
-      - name: sanity-check
+      - name: cml_run
         env:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Your ML workflow goes here
           pip install -r requirements.txt
-          dvc repro
-          #python test.py
+          dvc repro 
+          git fetch --prune
