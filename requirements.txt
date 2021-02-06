@@ -2,8 +2,8 @@ dvc==1.11.15
 joblib==1.0.0
 matplotlib==3.3.4
 numpy==1.20.0
-pandas==1.1.3
-pyyaml==5.3.1
+pandas==1.2.1
+pyyaml==5.4.1
 scikit-learn==0.23.2
 scipy==1.5.0
 tqdm==4.56.0
